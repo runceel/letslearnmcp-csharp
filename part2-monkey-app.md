@@ -12,14 +12,25 @@ In this section, you'll learn how to use existing MCP servers by building a fun 
 ### 2.1 Project Setup
 
 #### Create a new .NET project
-- Initialize a new console or web application
-- Set up proper project structure
-- Configure initial dependencies
+- Initialize a new console app inside of VS Code named **MyMonkeyApp**
+-- Or run the following command in your terminal:
+
+```bash
+dotnet new console -n MyMonkeyApp
+```
+
+- Add a new .gitignore file to exclude unnecessary files from your repository by running the following command:
+
+```bash 
+dotnet new gitignore
+```
 
 #### Push to GitHub
 - Create a new GitHub repository
 - Connect your local project
 - Make your first commit
+- This can be done through the VS Code Source Control panel
+- Ensure your repository is public so Copilot can access it
 
 ### 2.2 MCP Server Configuration and Initial Setup
 
@@ -91,14 +102,62 @@ Your final **mcp.json** should look like this:
 
 When the GitHub MCP server runs you will be prompted to authenticate with your GitHub account. Follow the instructions to complete the authentication process.
 
+#### Setup Copilot Instructions
+After creating your repository and pushing the initial commit, let's set up Copilot with project-specific context.
+
+**Task**: Create `.github/copilot-instructions.md` file
+**Steps**:
+1. Create `.github` folder in your repository root
+2. Add `copilot-instructions.md` file with the following content:
+
+```markdown
+This project is .NET 9 and uses C# 13.
+
+Make sure all code generated is inside of the MyMonkeyApp project, which may be a subfolder inside of the main folder.
+
+It is on GitHub at https://github.com/YOUR_USERNAME/YOUR_REPO_NAME
+
+## Project Context
+This is a console application that manages monkey species data and integrates with GitHub through MCP servers.
+
+## C# Coding Standards
+- Use PascalCase for class names, method names, and properties
+- Use camelCase for local variables and parameters
+- Use descriptive names that clearly indicate purpose
+- Add XML documentation comments for public methods and classes
+- Use `var` for local variables when the type is obvious
+- Prefer explicit types when it improves readability
+- Use async/await for asynchronous operations
+- Follow the repository pattern for data access
+- Use proper exception handling with try-catch blocks
+- Implement IDisposable when managing resources
+- Use nullable reference types to avoid null reference exceptions
+- use file-scoped namespaces for cleaner code organization
+
+## Naming Conventions
+- Classes: `MonkeyHelper`, `Monkey`, `Program`
+- Methods: `GetMonkeys()`, `GetRandomMonkey()`, `GetMonkeyByName()`
+- Properties: `Name`, `Location`, `Population`
+- Variables: `selectedMonkey`, `monkeyCount`, `userInput`
+- Constants: `MAX_MONKEYS`, `DEFAULT_POPULATION`
+
+## Architecture
+- Console application with interactive menu
+- Static helper class for data management
+- Model classes for data representation
+- Separation of concerns between UI and business logic
+```
+
+**Important**: Replace `YOUR_USERNAME` and `YOUR_REPO_NAME` with your actual GitHub username and repository name.
+
 #### Create GitHub Issue for Project Planning
 Before we start coding, let's use the GitHub MCP server to create an issue that outlines our project goals.
 
 **Task**: Use VS Code with GitHub MCP to create a new issue
 **Sample Copilot Command**:
-> "Create a new GitHub issue in my repository titled 'Implement Monkey Console Application' with the following requirements: Create a C# console app that can list all available monkeys, get details for a specific monkey by name, and pick a random monkey. The app should use a Monkey model class and include ASCII art for visual appeal. Add appropriate labels like 'enhancement' and 'good first issue'."
+> "Create a new GitHub issue in my repository titled 'Implement Monkey Console Application' with the following requirements: Create a C# console app that can list all available monkeys, get details for a specific monkey by name, and pick a random monkey. The app should use a Monkey model class and include ASCII art for visual appeal. Add appropriate labels like 'enhancement' and 'good first issue'. Add some details about how we may go about implementing this and a checklist for what we will need to do."
 
-**Expected Issue Content**:
+**Sample Issue Content** it may create:
 ```markdown
 # Implement Monkey Console Application
 
@@ -124,49 +183,6 @@ Create a fun and interactive console application for exploring monkey species da
 - Include XML documentation comments
 ```
 
-#### Setup Copilot Instructions
-After creating your repository and pushing the initial commit, let's set up Copilot with project-specific context.
-
-**Task**: Create `.github/copilot-instructions.md` file
-**Steps**:
-1. Create `.github` folder in your repository root
-2. Add `copilot-instructions.md` file with the following content:
-
-```markdown
-This project is .NET 9 and uses C# 13.
-
-It is on GitHub at [https://github.com/YOUR_USERNAME/YOUR_REPO_NAME](https://github.com/YOUR_USERNAME/YOUR_REPO_NAME)
-
-## Project Context
-This is a console application that manages monkey species data and integrates with GitHub through MCP servers.
-
-## C# Coding Standards
-- Use PascalCase for class names, method names, and properties
-- Use camelCase for local variables and parameters
-- Use descriptive names that clearly indicate purpose
-- Add XML documentation comments for public methods and classes
-- Use `var` for local variables when the type is obvious
-- Prefer explicit types when it improves readability
-- Use async/await for asynchronous operations
-- Follow the repository pattern for data access
-- Use proper exception handling with try-catch blocks
-- Implement IDisposable when managing resources
-
-## Naming Conventions
-- Classes: `MonkeyHelper`, `Monkey`, `Program`
-- Methods: `GetMonkeys()`, `GetRandomMonkey()`, `GetMonkeyByName()`
-- Properties: `Name`, `Location`, `Population`
-- Variables: `selectedMonkey`, `monkeyCount`, `userInput`
-- Constants: `MAX_MONKEYS`, `DEFAULT_POPULATION`
-
-## Architecture
-- Console application with interactive menu
-- Static helper class for data management
-- Model classes for data representation
-- Separation of concerns between UI and business logic
-```
-
-**Important**: Replace `YOUR_USERNAME` and `YOUR_REPO_NAME` with your actual GitHub username and repository name.
 
 ### 2.3 Interactive Development with Copilot
 
@@ -203,12 +219,6 @@ namespace MonkeyApp
 - `Image` - URL or path to monkey image
 - `Population` - Estimated population count
 - `Latitude` / `Longitude` - Geographic coordinates for mapping
-
-**Additional Tasks**:
-- Generate strongly-typed classes with proper C# conventions
-- Create mock data collection with 10-15 different monkey species
-- Implement data validation attributes if needed
-- Consider adding ToString() override for display purposes
 
 #### Build the Random Monkey App
 - **Task**: Create an application that selects random monkeys from the collection
@@ -265,7 +275,7 @@ The helper should contain monkeys like:
 - **Expected Output**: A console application with the following menu structure:
 
 **Sample Copilot Command**:
-> "Create a Program.cs file that displays an interactive menu for the monkey app. The menu should have options to: 1) List all monkeys, 2) Get details for a specific monkey by name, 3) Get a random monkey, 4) Exit. Include ASCII art of a monkey face when displaying monkey details. Use the MonkeyHelper class methods and show access counts for each monkey."
+> "Update the Program.cs file that displays an interactive menu for the monkey app. The menu should have options to: 1) List all monkeys, 2) Get details for a specific monkey by name, 3) Get a random monkey, 4) Exit. Include ASCII art of a monkey face when displaying monkey details. Use the MonkeyHelper class methods and show access counts for each monkey."
 
 **Expected Console Output**:
 ```
