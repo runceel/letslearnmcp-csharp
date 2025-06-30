@@ -12,8 +12,8 @@ In this section, you'll learn how to use existing MCP servers by building a fun 
 ### 2.1 Project Setup
 
 #### Create a new .NET project
-- Initialize a new console app inside of VS Code named **MyMonkeyApp**
--- Or run the following command in your terminal:
+- Create a new folder called **MonkeyApp** and then create a new C# console app named **MyMonkeyApp** inside of the folder. 
+-- Or run the following command in your terminal in a new folder named **MonkeyApp**:
 
 ```bash
 dotnet new console -n MyMonkeyApp
