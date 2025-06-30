@@ -16,9 +16,11 @@ Create a new folder called **LunchTime** and then create a new C# console app na
 ### NuGet Package Installation
 Essential packages for MCP server development:
 ```xml
-<PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.6" />
-<PackageReference Include="ModelContextProtocol" Version="0.3.0-preview.1" />
-<PackageReference Include="System.Text.Json" Version="9.0.6" />
+<ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.6" />
+    <PackageReference Include="ModelContextProtocol" Version="0.3.0-preview.1" />
+    <PackageReference Include="System.Text.Json" Version="9.0.6" />
+</ItemGroup>
 ```
 
 ### Program.cs Setup
@@ -32,23 +34,19 @@ Essential packages for MCP server development:
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ModelContextProtocol.Server;
-using LunchTimeMCP;
 
 var builder = Host.CreateEmptyApplicationBuilder(settings: null);
 
 builder.Services
-    .AddSingleton<RestaurantService>()  // Register our service
     .AddMcpServer()
-    .WithStdioServerTransport()
-    .WithMcpServerToolsFrom<RestaurantTools>();  // Register our MCP tools
+    .WithStdioServerTransport();
 
 await builder.Build().RunAsync();
 ```
 
 **Key Points**:
-- `AddSingleton<RestaurantService>()` registers our service for dependency injection
-- `WithMcpServerToolsFrom<RestaurantTools>()` automatically discovers and registers all MCP tools
 - The MCP library handles the rest of the server setup and protocol implementation
+- We will come back and register our services and tools
 
 ## 3.2 Core Components
 
@@ -342,6 +340,35 @@ The RestaurantService follows several important patterns:
 
 Now we'll implement the MCP tools that expose our restaurant functionality to AI assistants. Create a new file called **RestaurantTools.cs** and implement each tool step by step.
 
+### RestaurantTools.cs File Structure
+
+Let's start by creating the basic structure for our tools.
+
+```csharp
+using System.ComponentModel;
+using System.Text.Json;
+using ModelContextProtocol.Server;
+
+namespace LunchTimeMCP;
+
+[McpServerToolType]
+public sealed class RestaurantTools
+{
+    private readonly RestaurantService restaurantService;
+
+    public RestaurantTools(RestaurantService restaurantService)
+    {
+        this.restaurantService = restaurantService;
+    }
+
+    // All tools implemented here...
+}
+```
+
+**Architecture Notes**:
+- `[McpServerToolType]` marks the class as containing MCP tools
+- Constructor injection provides access to `RestaurantService`
+
 ### Tool Implementation Overview
 Each tool follows the same pattern:
 1. Use `[McpServerTool]` attribute to register with MCP
@@ -440,34 +467,41 @@ public async Task<string> GetVisitStatistics()
 - Returns comprehensive statistics including visit counts and totals
 - Leverages the pre-built formatting logic in the service
 
-### Complete RestaurantTools.cs File Structure
+### Register Tools & Services in Program.cs
+Finally, we need to register our tools and the service in the `Program.cs` file. Update your `Program.cs` to include:
 
 ```csharp
-using System.ComponentModel;
-using System.Text.Json;
-using ModelContextProtocol.Server;
-
-namespace LunchTimeMCP;
-
-[McpServerToolType]
-public sealed class RestaurantTools
-{
-    private readonly RestaurantService restaurantService;
-
-    public RestaurantTools(RestaurantService restaurantService)
-    {
-        this.restaurantService = restaurantService;
-    }
-
-    // All four tools implemented here...
-}
+builder.Services.AddSingleton<RestaurantService>();
 ```
 
-**Architecture Notes**:
-- `[McpServerToolType]` marks the class as containing MCP tools
-- Constructor injection provides access to `RestaurantService`
-- All methods are `async Task<string>` returning JSON
-- Consistent error handling and response formatting
+Add the tool registration line to the server configuration:
+
+```csharp
+builder.Services
+    .AddMcpServer()
+    .WithStdioServerTransport()
+    .WithTools<RestaurantTools>();
+```
+
+The finished file will look like this:
+
+```csharp
+using LunchTimeMCP;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using ModelContextProtocol.Server;
+
+var builder = Host.CreateEmptyApplicationBuilder(settings: null);
+
+builder.Services
+    .AddMcpServer()
+    .WithStdioServerTransport()
+    .WithTools<RestaurantTools>();
+
+builder.Services.AddSingleton<RestaurantService>();
+
+await builder.Build().RunAsync();
+```
 
 ## 3.4 Testing Your MCP Server
 
@@ -475,42 +509,35 @@ public sealed class RestaurantTools
 
 **Step 1: Navigate to Your Project**
 ```bash
-cd LunchTime/LunchTimeMCP
+cd LunchTimeMCP
 ```
 
 **Step 2: Build and Test Your Server**
 ```bash
 dotnet build
-dotnet run
 ```
-The server should start without errors and wait for MCP protocol connections.
 
 **Step 3: Install and Run MCP Inspector**
 
-**Option A: Install MCP Inspector with npm**
+**Install MCP Inspector with npm**
 ```bash
 npm install -g @modelcontextprotocol/inspector
 ```
 
-Then run it locally:
+**`Run MCP Inspector with npx**
 ```bash
-mcp-inspector
+npx @modelcontextprotocol/inspector dotnet run
 ```
 
-**Option B: Run MCP Inspector with npx (no installation required)**
-```bash
-npx @modelcontextprotocol/inspector
-```
-
-Both options will open MCP Inspector in your default browser at `http://localhost:5173`.
+When run you will receive a URL with a pre-filled token to open in the browser.
 
 **Step 4: Connect to Your MCP Server**
 1. In the MCP Inspector web interface:
-   - **Transport Type**: Select "stdio" 
+   - **Transport Type**: Select "STDIO" 
    - **Command**: `dotnet`
-   - **Arguments**: `run` (or `run --project /path/to/your/LunchTimeMCP`)
-   - **Working Directory**: Set to your `LunchTime/LunchTimeMCP` folder path
+   - **Arguments**: `run`
 2. Click "Connect" to establish the connection
+3. Click **List Tools**
 3. You should see your four tools appear in the inspector:
    - `GetRestaurants`
    - `AddRestaurant` 
@@ -549,7 +576,7 @@ Create a `.vscode` folder in your workspace root (if it doesn't exist) and add a
             "args": [
                 "run",
                 "--project",
-                "C:\\GitHub\\letslearnmcp-csharp\\LunchTime\\LunchTimeMCP\\LunchTimeMCP.csproj"
+                "PATH_TO_YOUR_PROJECT\\LunchTimeMCP.csproj"
             ],
             "env": {}
         }
@@ -557,7 +584,7 @@ Create a `.vscode` folder in your workspace root (if it doesn't exist) and add a
 }
 ```
 
-**Important**: Update the project path in the `args` array to match your actual project location. The path should point to your `.csproj` file.
+**Important**: Update the project path in the `args` array to match your actual project location. The path should point to your `.csproj` file. You can right click the project in VS Code and select "Copy Path" to get the correct path. Make sure you use double backslashes (`\\`) in the path for Windows or single forward slashes (`/`) for Unix-based systems.
 
 **Step 2: Configuration Details**
 
@@ -569,9 +596,11 @@ Create a `.vscode` folder in your workspace root (if it doesn't exist) and add a
 
 **Step 3: Verify Configuration**
 
-1. Ensure your project builds successfully: `dotnet build`
-2. Test that your server runs: `dotnet run --project path/to/your/LunchTimeMCP.csproj`
-3. Check that GitHub Copilot can access your MCP tools
+1. In the **mcp.json** file you will see a **Start** button become available over the server name.
+2. Click the **Start** button to launch your MCP server.
+3. If everything is set up correctly, you should see the MCP server start, and it will be ready to accept commands from GitHub Copilot chat.
+4. Open the GitHub Copilot chat in VS Code and ensure it recognizes your MCP server.
+5. Click on the tools icon in Agent mode to see all available tools.
 
 **Step 4: Using Your MCP Server in VS Code**
 
@@ -582,31 +611,7 @@ Once configured, you can interact with your lunch roulette server through GitHub
 - **"Show me all available restaurants"**
 - **"Get statistics on restaurant visits"**
 
-#### General AI Assistant Integration
-
-For other AI assistants:
-
-1. Configure your MCP server using their specific configuration format
-2. Test each tool through natural language commands
-3. Verify data persistence and error handling
-4. Monitor performance and debug any issues
-
-
-
-## 3.5 Deployment and Production
-
-### Deployment Strategies
-- **Local Development**: Run directly from your development machine
-- **Production Deployment**: Deploy to cloud services or on-premises servers
-- **Configuration Management**: Use environment variables and configuration files
-- **Monitoring and Maintenance**: Implement logging and health checks
-
-## Learning Outcomes
-- Complete MCP server architecture understanding
-- Tool development patterns and best practices
-- Protocol implementation details
-- Production deployment considerations
-- Integration with AI assistants
+You can also use the `#` prefix to directly call tools in the chat, like `#GetRestaurants` or `#PickRandomRestaurant`.
 
 ---
 
