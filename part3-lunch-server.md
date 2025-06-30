@@ -7,33 +7,7 @@
 ## Overview
 Learn to build your own MCP server from scratch by creating a lunch recommendation system. This tutorial will teach you the complete process of designing, implementing, and deploying an MCP server using C#.
 
-```bash
-dotnet build
-dotnet run
-```
-The server should start without errors and wait for MCP protocol connections.
-
-**Step 3: Install MCP Inspector (Optional Command-Line Approach)**
-
-If you prefer using the command line, you can install MCP Inspector globally via npm:
-
-```bash
-npm install -g @modelcontextprotocol/inspector
-```
-
-Once installed, you can run it directly:
-```bash
-npx @modelcontextprotocol/inspector
-```
-
-This will open MCP Inspector in your default browser. Alternatively, you can run it without installing:
-```bash
-npx @modelcontextprotocol/inspector
-```
-
-**Note**: The npm approach requires Node.js to be installed on your system. If you don't have Node.js, you can use the web version directly at [MCP Inspector](https://github.com/modelcontextprotocol/inspector).
-
-**Step 4: Test with MCP Inspector**Project Foundation
+## 3.1 Project Foundation
 
 ### Create console app
 
