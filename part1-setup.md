@@ -18,7 +18,13 @@ Before diving into MCP development, ensure you have the following tools installe
 - Provides comprehensive C# development support
 - Includes IntelliSense, debugging, and project templates
 
-### 4. Understanding MCP
+### 4. Docker Desktop
+- Download and install [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+- Required for running MCP servers in containers
+- Verify installation: `docker --version`
+- Ensure Docker Desktop is running before starting MCP servers
+
+### 5. Understanding MCP
 - What is Model Context Protocol?
 - How MCP Servers work with AI assistants
 - The client-server architecture
@@ -28,6 +34,7 @@ Before diving into MCP development, ensure you have the following tools installe
 - [ ] VS Code installed and running
 - [ ] .NET 9 SDK installed
 - [ ] C# Dev Kit extension active
+- [ ] Docker Desktop installed and running
 - [ ] Basic understanding of MCP concepts
 
 ## What is Model Context Protocol (MCP)?

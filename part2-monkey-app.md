@@ -23,6 +23,74 @@ In this section, you'll learn how to use existing MCP servers by building a fun 
 
 ### 2.2 MCP Server Configuration and Initial Setup
 
+
+#### Configure MonkeyMCP
+- Install and configure the MonkeyMCP server in VS Code
+- Understanding the MonkeyMCP API endpoints
+- Testing the MCP server connection
+- Verify you can retrieve monkey data through Copilot
+
+Create a new folder named **.vscode** and create a filed named **mcp.json** with the following content:
+
+```json
+{
+    "inputs": [],
+    "servers": {
+        "monkeymcp": {
+            "command": "docker",
+            "args": [
+                "run",
+                "-i",
+                "--rm",
+                "jamesmontemagno/monkeymcp"
+            ],
+            "env": {}
+        }
+    }
+}
+```
+
+#### Configure GitHub MCP
+- Install GitHub MCP server in VS Code
+- Set up GitHub authentication tokens
+- Configure repository access permissions
+- Verify GitHub MCP functionality by creating the issue above
+
+Update the **mcp.json** with a new server, this time will be a remote server for GitHub:
+
+```json
+"github": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp/"
+    }
+```
+
+Your final **mcp.json** should look like this:
+
+```json
+{
+    "inputs": [],
+    "servers": {
+        "monkeymcp": {
+            "command": "docker",
+            "args": [
+                "run",
+                "-i",
+                "--rm",
+                "jamesmontemagno/monkeymcp"
+            ],
+            "env": {}
+        },
+        "github": {
+            "type": "http",
+            "url": "https://api.githubcopilot.com/mcp/"
+        }
+    }
+}
+```
+
+When the GitHub MCP server runs you will be prompted to authenticate with your GitHub account. Follow the instructions to complete the authentication process.
+
 #### Create GitHub Issue for Project Planning
 Before we start coding, let's use the GitHub MCP server to create an issue that outlines our project goals.
 
@@ -99,18 +167,6 @@ This is a console application that manages monkey species data and integrates wi
 ```
 
 **Important**: Replace `YOUR_USERNAME` and `YOUR_REPO_NAME` with your actual GitHub username and repository name.
-
-#### Configure MonkeyMCP
-- Install and configure the MonkeyMCP server in VS Code
-- Understanding the MonkeyMCP API endpoints
-- Testing the MCP server connection
-- Verify you can retrieve monkey data through Copilot
-
-#### Configure GitHub MCP
-- Install GitHub MCP server in VS Code
-- Set up GitHub authentication tokens
-- Configure repository access permissions
-- Verify GitHub MCP functionality by creating the issue above
 
 ### 2.3 Interactive Development with Copilot
 
