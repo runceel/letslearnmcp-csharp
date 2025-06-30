@@ -7,7 +7,33 @@
 ## Overview
 Learn to build your own MCP server from scratch by creating a lunch recommendation system. This tutorial will teach you the complete process of designing, implementing, and deploying an MCP server using C#.
 
-## 3.1 Project Foundation
+```bash
+dotnet build
+dotnet run
+```
+The server should start without errors and wait for MCP protocol connections.
+
+**Step 3: Install MCP Inspector (Optional Command-Line Approach)**
+
+If you prefer using the command line, you can install MCP Inspector globally via npm:
+
+```bash
+npm install -g @modelcontextprotocol/inspector
+```
+
+Once installed, you can run it directly:
+```bash
+npx @modelcontextprotocol/inspector
+```
+
+This will open MCP Inspector in your default browser. Alternatively, you can run it without installing:
+```bash
+npx @modelcontextprotocol/inspector
+```
+
+**Note**: The npm approach requires Node.js to be installed on your system. If you don't have Node.js, you can use the web version directly at [MCP Inspector](https://github.com/modelcontextprotocol/inspector).
+
+**Step 4: Test with MCP Inspector**Project Foundation
 
 ### Create console app
 
@@ -471,17 +497,127 @@ public sealed class RestaurantTools
 
 ## 3.4 Testing Your MCP Server
 
-### Local Testing
-1. Build and run your MCP server: `dotnet run`
-2. The server will start and listen for MCP protocol connections
-3. Test with VS Code by configuring your server in the MCP settings
-4. Verify each tool works as expected
+### Local Testing with MCP Inspector
+
+**Step 1: Navigate to Your Project**
+```bash
+cd LunchTime/LunchTimeMCP
+```
+
+**Step 2: Build and Test Your Server**
+```bash
+dotnet build
+dotnet run
+```
+The server should start without errors and wait for MCP protocol connections.
+
+**Step 3: Install and Run MCP Inspector**
+
+**Option A: Install MCP Inspector with npm**
+```bash
+npm install -g @modelcontextprotocol/inspector
+```
+
+Then run it locally:
+```bash
+mcp-inspector
+```
+
+**Option B: Run MCP Inspector with npx (no installation required)**
+```bash
+npx @modelcontextprotocol/inspector
+```
+
+Both options will open MCP Inspector in your default browser at `http://localhost:5173`.
+
+**Step 4: Connect to Your MCP Server**
+1. In the MCP Inspector web interface:
+   - **Transport Type**: Select "stdio" 
+   - **Command**: `dotnet`
+   - **Arguments**: `run` (or `run --project /path/to/your/LunchTimeMCP`)
+   - **Working Directory**: Set to your `LunchTime/LunchTimeMCP` folder path
+2. Click "Connect" to establish the connection
+3. You should see your four tools appear in the inspector:
+   - `GetRestaurants`
+   - `AddRestaurant` 
+   - `PickRandomRestaurant`
+   - `GetVisitStatistics`
+
+**Step 5: Test Each Tool**
+- **GetRestaurants**: Should return the 10 seeded restaurants
+- **AddRestaurant**: Try adding a new restaurant with name, location, and food type
+- **PickRandomRestaurant**: Should select and track a random restaurant
+- **GetVisitStatistics**: Should show access counts for visited restaurants
+
+**Troubleshooting**:
+- Ensure you're in the correct project directory
+- Verify `dotnet run` works standalone before using MCP Inspector
+- Check the console output for any error messages
+- Make sure the stdio transport is selected (not TCP or other options)
 
 ### Integration with AI Assistants
-1. Configure your MCP server in your preferred AI assistant
+
+#### VS Code Configuration with GitHub Copilot
+
+To integrate your MCP server with VS Code and GitHub Copilot, you'll need to create a configuration file that tells VS Code how to connect to your server.
+
+**Step 1: Create MCP Configuration File**
+
+Create a `.vscode` folder in your workspace root (if it doesn't exist) and add a `mcp.json` file:
+
+```json
+{
+    "inputs": [],
+    "servers": {
+        "lunchroulette": {
+            "type": "stdio",
+            "command": "dotnet",
+            "args": [
+                "run",
+                "--project",
+                "C:\\GitHub\\letslearnmcp-csharp\\LunchTime\\LunchTimeMCP\\LunchTimeMCP.csproj"
+            ],
+            "env": {}
+        }
+    }
+}
+```
+
+**Important**: Update the project path in the `args` array to match your actual project location. The path should point to your `.csproj` file.
+
+**Step 2: Configuration Details**
+
+- **`lunchroulette`**: A unique identifier for your MCP server
+- **`type`**: Set to "stdio" for standard input/output communication
+- **`command`**: The executable command (`dotnet`)
+- **`args`**: Arguments passed to the command, including the project path
+- **`env`**: Environment variables (empty object for default environment)
+
+**Step 3: Verify Configuration**
+
+1. Ensure your project builds successfully: `dotnet build`
+2. Test that your server runs: `dotnet run --project path/to/your/LunchTimeMCP.csproj`
+3. Check that GitHub Copilot can access your MCP tools
+
+**Step 4: Using Your MCP Server in VS Code**
+
+Once configured, you can interact with your lunch roulette server through GitHub Copilot chat:
+
+- **"Pick a random restaurant for lunch"**
+- **"Add a new restaurant called 'Spago' in Beverly Hills serving Californian cuisine"**
+- **"Show me all available restaurants"**
+- **"Get statistics on restaurant visits"**
+
+#### General AI Assistant Integration
+
+For other AI assistants:
+
+1. Configure your MCP server using their specific configuration format
 2. Test each tool through natural language commands
 3. Verify data persistence and error handling
 4. Monitor performance and debug any issues
+
+
 
 ## 3.5 Deployment and Production
 

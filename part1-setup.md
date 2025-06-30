@@ -18,13 +18,19 @@ Before diving into MCP development, ensure you have the following tools installe
 - Provides comprehensive C# development support
 - Includes IntelliSense, debugging, and project templates
 
-### 4. Docker Desktop
+### 4. Node.js
+- Download and install [Node.js](https://nodejs.org/) (LTS version recommended)
+- Required for MCP Inspector and other MCP development tools
+- Verify installation: `node --version` and `npm --version`
+- Enables npm package management for MCP tooling
+
+### 5. Docker Desktop
 - Download and install [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 - Required for running MCP servers in containers
 - Verify installation: `docker --version`
 - Ensure Docker Desktop is running before starting MCP servers
 
-### 5. Understanding MCP
+### 6. Understanding MCP
 - What is Model Context Protocol?
 - How MCP Servers work with AI assistants
 - The client-server architecture
@@ -34,6 +40,7 @@ Before diving into MCP development, ensure you have the following tools installe
 - [ ] VS Code installed and running
 - [ ] .NET 9 SDK installed
 - [ ] C# Dev Kit extension active
+- [ ] Node.js and npm installed
 - [ ] Docker Desktop installed and running
 - [ ] Basic understanding of MCP concepts
 
