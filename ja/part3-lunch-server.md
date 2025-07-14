@@ -57,7 +57,7 @@ await builder.Build().RunAsync();
 - **データ永続化**: ユーザーのAppDataディレクトリでのJSONファイルストレージ
 - **レストラン管理**: レストランの追加、取得、追跡
 - **訪問追跡**: レストラン選択の回数と統計
-- **シードデータ**: トレンディなウェストハリウッドレストランで事前入力
+- **シードデータ**: トレンディな品川レストランで事前入力
 - **非同期操作**: すべてのメソッドでasync/awaitパターンを使用
 - **エラーハンドリング**: ファイル操作用のtry-catchブロック
 
@@ -78,7 +78,7 @@ await builder.Build().RunAsync();
 - **ファイルストレージ**: `%AppData%/LunchTimeMCP/restaurants.json`でのJSON永続化
 - **JSONシリアル化**: ソースジェネレーター（`RestaurantContext`）でSystem.Text.Jsonを使用
 - **メモリ管理**: 定期的なファイル保存付きインメモリコレクション
-- **初期化**: 空の場合は10のトレンディなLAレストランで自動シード
+- **初期化**: 空の場合は10のトレンディな品川レストランで自動シード
 
 ```csharp
 using System.Text.Json;
@@ -102,7 +102,7 @@ public class RestaurantService
         dataFilePath = Path.Combine(appDir, "restaurants.json");
         LoadData();
         
-        // 空の場合はトレンディなウェストハリウッドレストランで初期化
+        // 空の場合はトレンディな品川のレストランで初期化
         if (restaurants.Count == 0)
         {
             InitializeWithTrendyRestaurants();
@@ -241,16 +241,16 @@ public class RestaurantService
     {
         var trendyRestaurants = new List<Restaurant>
         {
-            new() { Id = Guid.NewGuid().ToString(), Name = "Guelaguetza", Location = "3014 W Olympic Blvd", FoodType = "オアハカメキシカン", DateAdded = DateTime.UtcNow },
-            new() { Id = Guid.NewGuid().ToString(), Name = "Republique", Location = "624 S La Brea Ave", FoodType = "フレンチビストロ", DateAdded = DateTime.UtcNow },
-            new() { Id = Guid.NewGuid().ToString(), Name = "Night + Market WeHo", Location = "9041 Sunset Blvd", FoodType = "タイストリートフード", DateAdded = DateTime.UtcNow },
-            new() { Id = Guid.NewGuid().ToString(), Name = "Gracias Madre", Location = "8905 Melrose Ave", FoodType = "ビーガンメキシカン", DateAdded = DateTime.UtcNow },
-            new() { Id = Guid.NewGuid().ToString(), Name = "The Ivy", Location = "113 N Robertson Blvd", FoodType = "カリフォルニア料理", DateAdded = DateTime.UtcNow },
-            new() { Id = Guid.NewGuid().ToString(), Name = "Catch LA", Location = "8715 Melrose Ave", FoodType = "シーフード", DateAdded = DateTime.UtcNow },
-            new() { Id = Guid.NewGuid().ToString(), Name = "Cecconi's", Location = "8764 Melrose Ave", FoodType = "イタリアン", DateAdded = DateTime.UtcNow },
-            new() { Id = Guid.NewGuid().ToString(), Name = "Earls Kitchen + Bar", Location = "8730 W Sunset Blvd", FoodType = "グローバルコンフォートフード", DateAdded = DateTime.UtcNow },
-            new() { Id = Guid.NewGuid().ToString(), Name = "Pump Restaurant", Location = "8948 Santa Monica Blvd", FoodType = "地中海料理", DateAdded = DateTime.UtcNow },
-            new() { Id = Guid.NewGuid().ToString(), Name = "Craig's", Location = "8826 Melrose Ave", FoodType = "アメリカンコンテンポラリー", DateAdded = DateTime.UtcNow }
+            new() { Id = Guid.NewGuid().ToString(), Name = "和楽", Location = "品川区東五反田2-3-5", FoodType = "和食", DateAdded = DateTime.UtcNow },
+            new() { Id = Guid.NewGuid().ToString(), Name = "ブルー・オーシャン", Location = "品川区港南1-2-10", FoodType = "フレンチ", DateAdded = DateTime.UtcNow },
+            new() { Id = Guid.NewGuid().ToString(), Name = "タイ・ガーデン", Location = "品川区大崎3-1-8", FoodType = "タイ料理", DateAdded = DateTime.UtcNow },
+            new() { Id = Guid.NewGuid().ToString(), Name = "グリーン・テーブル", Location = "品川区西五反田4-2-15", FoodType = "ビーガン", DateAdded = DateTime.UtcNow },
+            new() { Id = Guid.NewGuid().ToString(), Name = "桜坂テラス", Location = "品川区東品川1-6-3", FoodType = "創作料理", DateAdded = DateTime.UtcNow },
+            new() { Id = Guid.NewGuid().ToString(), Name = "オーシャン・ハーベスト", Location = "品川区南品川2-4-7", FoodType = "シーフード", DateAdded = DateTime.UtcNow },
+            new() { Id = Guid.NewGuid().ToString(), Name = "ベラ・ナポリ", Location = "品川区北品川3-5-12", FoodType = "イタリアン", DateAdded = DateTime.UtcNow },
+            new() { Id = Guid.NewGuid().ToString(), Name = "グローバル・キッチン", Location = "品川区大井1-3-9", FoodType = "インターナショナル", DateAdded = DateTime.UtcNow },
+            new() { Id = Guid.NewGuid().ToString(), Name = "地中海の風", Location = "品川区戸越2-1-6", FoodType = "地中海料理", DateAdded = DateTime.UtcNow },
+            new() { Id = Guid.NewGuid().ToString(), Name = "モダン品川", Location = "品川区上大崎1-4-11", FoodType = "コンテンポラリー", DateAdded = DateTime.UtcNow }
         };
 
         restaurants.AddRange(trendyRestaurants);
